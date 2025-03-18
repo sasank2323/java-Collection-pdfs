@@ -1,0 +1,454 @@
+
+select from where group by having order by -->  rule of structured query language 
+
+select *from employee where country in ("sasank","mm");
+
+use having  stop using where filter data :
+
+
+select *from emp having name="sasank";
+
+select eid from emp order by eid desc;
+
+
+
+count no of employee per city order by count :
+
+select count(emp) from employee group by city order by count(eid) asc;
+
+SELECT UPPER(student_name) FROM student;
+
+SELECT LOWER(student_name) FROM student;
+
+
+2	mike	mike@gmail.com	9999999999
+4	mike	mike@gmail.com	9999999999
+9	adam	adam@gmail.com	8889999999
+11	adam	adam@gmail.com	8889999999
+12	adam	adam@gmail.com	8889999999
+
+			
+select mid(name,1,3) from registration;
+
+out put:
+mik
+mik
+ada
+ada
+ada
+
+
+select now() as time;
+
+output: 2024-11-22 15:42:16
+
+registration table
+
+6	mike	mike@gmail.com	9999999999
+7	mike	mike@gmail.com	9999999999
+9	adam	adam@gmail.com	8889999999
+11	adam	adam@gmail.com	8889999999
+
+select concat(name,email) from registration;
+
+output:
+
+mikemike@gmail.com
+mikemike@gmail.com
+adamadam@gmail.com
+adamadam@gmail.com
+
+select concat(name,"--",email) from registration;
+
+mike--mike@gmail.com
+mike--mike@gmail.com
+adam--adam@gmail.com
+adam--adam@gmail.com
+
+select ltrim(name) from employee; --> remove the spaces from left
+select ltrim(name) from employee; --> remove the spaces from right
+select trim(name) from employee; --> remove white spaces from both sides
+
+select concat(trim(ename),"--",trim(salary)) from employee;  --> here we are trimming the white spaces and concating it 
+
+select concat(ename,salary) from employee order by salary desc; --> concat ename and salary and order it in descending order 
+                          
+                                             
+
+INSERT INTO employee (name, city) VALUES
+('Alice', 'New York'),
+('Bob', 'New York'),
+('Charlie', 'Los Angeles'),
+('David', 'Chicago'),
+('Eve', 'New York'),
+('Frank', 'Los Angeles'),
+('Grace', 'Chicago'),
+('Heidi', 'Los Angeles'),
+('Ivy', 'New York'),
+('Jack', 'Chicago');
+
+select length(name) from employee;
+
+5
+3
+7
+5
+3
+5
+5
+5
+3
+4
+5
+3
+
+SELECT city, COUNT(name) AS number_of_people FROM employee GROUP BY city;
+
+City	         Number_of_people
+New York	   4
+Los Angeles	   3
+Chicago	           3
+
+
+sub query:
+
+second max salary : select max(salary) from employee where salary < (select max(salary) from employee);
+
+5th highest 
+
+SELECT MIN(salary) FROM (SELECT DISTINCT salary FROM employee ORDER BY salary desc LIMIT 5) AS TopSalaries;
+
+write down the employee name who got incentive ,sub query for two tables you need atleast one column similar
+
+select ename from employee where eid in(select eid from incentivelist);
+
+select eid from incentivelist      --> this table have all the names who got incentives go to a set where we check ename by using eid from both tables 
+
+NOW APPLY SUB QUERYS ON THREE TABLES 
+
+SELECT ENAME FROM EMPLOYEE WHERE EID IN (SELECT EID FROM INCREMENT_LIST WHERE EID IN (SELECT EID FROM STATUS WHERE MARRIED_STATUS="YES));
+
+FIRST WE CHECK MARRIED AND ADD ALL TO A SET THEN CHCEK IN INCREMENT LIST ARE THOSE EID PRESENT ARE NOT THEN FINALLY CHECK THOSE EID IN EMPLOYEE AND PRINT ENAME 
+
+
+CREATE TABLE SampleData (
+    ID INT PRIMARY KEY,              -- Integer for unique identification
+    Name VARCHAR(50) NOT NULL,       -- Variable-length string for names
+    Age SMALLINT,                    -- Small integer for age
+    Salary DECIMAL(10, 2),           -- Decimal with precision and scale for salary
+    JoiningDate DATE,                -- Date type for storing dates
+    IsActive BOOLEAN,                -- Boolean for true/false values
+    Bio TEXT,                        -- Text for long strings like a biography
+    ProfilePicture BLOB,             -- Binary large object for storing images or files
+    UserRole ENUM('Admin', 'User', 'Guest') NOT NULL,  -- Enum for specific role values
+    CreatedAt TIMESTAMP DEFAULT CURRENT_TIMESTAMP -- Timestamp for creation time
+);
+
+INSERT INTO SampleData (ID, Name, Age, Salary, JoiningDate, IsActive, Bio, ProfilePicture, UserRole) 
+VALUES
+(1, 'Alice', 30, 75000.50, '2022-01-15', TRUE, 'Alice is a dedicated software engineer.', NULL, 'Admin'),
+(2, 'Bob', 25, 55000.00, '2023-05-20', FALSE, 'Bob is an intern learning new skills.', NULL, 'User'),
+(3, 'Charlie', 28, 60000.75, '2023-03-10', TRUE, 'Charlie specializes in database management.', NULL, 'Guest');
+
+
+
+Explanation of the ENUM Type:
+UserRole ENUM('Admin', 'User', 'Guest'): The ENUM type restricts the column to one of the predefined values: 'Admin', 'User', or 'Guest'. It is a lightweight alternative to creating a separate table for such categories.
+This updated table includes a variety of data types, including the ENUM, to handle different types of data efficiently. Let me know if you need further adjustments!
+
+
+The SET data type, available in MySQL, allows a column to store multiple values chosen from a predefined set of options. Here’s how you can create a table with a SET data type and insert some data:
+
+Create Table with SET Data Type
+sql
+Copy code
+CREATE TABLE UserPreferences (
+    ID INT PRIMARY KEY,                      -- Unique identifier
+    Name VARCHAR(50) NOT NULL,               -- User's name
+    Preferences SET('Email', 'SMS', 'Push', 'Call') NOT NULL -- Predefined preferences
+);
+
+INSERT INTO UserPreferences (ID, Name, Preferences) 
+VALUES
+(1, 'Alice', 'Email,SMS'),
+(2, 'Bob', 'Push,Call'),
+(3, 'Charlie', 'Email,Push,Call'),
+(4, 'Diana', 'SMS');
+
+Explanation of the SET Column:
+Preferences: Allows users to select multiple options (e.g., 'Email', 'SMS', 'Push', 'Call') in any combination. For example:
+'Email,SMS': User prefers both email and SMS.
+'Push,Call': User prefers push notifications and calls.
+
+
+foreign key :
+
+in olden days people used to fetch data from single table which is very hard and time consuming so thats why they introduced rdbms 
+
+A foreign key is a field (or a collection of fields) in one table that uniquely identifies a row in another table. It establishes and enforces a link between the data in the two tables to maintain referential integrity.
+
+Key Concepts of Foreign Key
+Parent Table: The table containing the primary key (or unique key) that the foreign key refers to.
+Child Table: The table containing the foreign key that references the primary key of the parent table.
+Referential Integrity: Ensures that the relationship between the tables is consistent:
+You cannot insert a value into the foreign key column of the child table unless it exists in the parent table.
+You cannot delete a row from the parent table if it would break the relationship with rows in the child table (unless cascading is configured).
+
+CREATE TABLE Departments (
+    DepartmentID INT PRIMARY KEY,      -- Primary Key
+    DepartmentName VARCHAR(50) NOT NULL
+);
+
+CREATE TABLE Employees (
+    EmployeeID INT PRIMARY KEY,        -- Primary Key
+    EmployeeName VARCHAR(50) NOT NULL,
+    DepartmentID INT,                  -- Foreign Key
+    FOREIGN KEY (DepartmentID) REFERENCES Departments(DepartmentID) -- Defining the Foreign Key
+);
+
+Departments Table:
+Holds unique department information (e.g., DepartmentID).
+Employees Table:
+DepartmentID in this table must match a valid DepartmentID in the Departments table.
+
+Insert Data into Tables
+Insert Data into the Parent Table:
+
+sql
+Copy code
+INSERT INTO Departments (DepartmentID, DepartmentName) 
+VALUES 
+(1, 'HR'),
+(2, 'Engineering'),
+(3, 'Marketing');
+Insert Data into the Child Table:
+
+sql
+Copy code
+INSERT INTO Employees (EmployeeID, EmployeeName, DepartmentID) 
+VALUES 
+(101, 'Alice', 1),        -- Valid: DepartmentID = 1 exists
+(102, 'Bob', 2),          -- Valid: DepartmentID = 2 exists
+(103, 'Charlie', 3);      -- Valid: DepartmentID = 3 exists
+Attempt Invalid Insert:
+
+sql
+Copy code
+INSERT INTO Employees (EmployeeID, EmployeeName, DepartmentID) 
+VALUES 
+(104, 'Diana', 5);        -- Error: DepartmentID = 5 does not exist in Departments
+
+even though we use inner quires it does not print two tables data 
+BUT IF YOU USE JOINS WE CAN PRINT TWO TABELS DATA
+
+INNER JOIN : IF YOU WANT TO DISPLAY TWO COLUMNS OF DIFFERENT TABLES THEN WE USE INNER JOIN 
+
+What are Joins in SQL?
+Joins in SQL are used to combine rows from two or more tables based on a related column between them. They allow you to retrieve data that is distributed across multiple tables in a relational database.
+
+1. INNER JOIN
+An INNER JOIN retrieves rows that have matching values in both tables. Rows from either table that do not have a match in the other table are excluded.
+
+
+Inner Join: Explanation
+An INNER JOIN retrieves rows that have matching values in both tables. Rows from either table that do not have a match in the other table are excluded.
+
+Example :Table 1: Employees
+
+EmployeeID	Name	DepartmentID
+1	        John	        101
+2	        Alice	        102
+3	        Bob	        103
+4	        Sarah	        NULL
+
+Table 2: Departments
+DepartmentID	DepartmentName
+101	         HR
+102	         IT
+103	         Finance
+104	         Marketing
+
+Step 2: Write an INNER JOIN Query
+
+SELECT Employees.Name, Departments.DepartmentName
+FROM Employees
+INNER JOIN Departments
+ON Employees.DepartmentID = Departments.DepartmentID;
+
+Output of the Query
+Name	DepartmentName
+John	HR
+Alice	IT
+Bob	Finance
+
+Key Points to Remember
+Matching Rows Only: INNER JOIN retrieves rows with matching values in the join condition.
+Non-Matching Rows Excluded: Rows without matches in either table are not included.
+Join Condition: The ON clause specifies the column(s) used to match rows from both tables.
+Multiple Joins: INNER JOIN can be used with multiple tables.
+Alias Usage: Use table aliases to make queries cleaner, e.g., Employees AS E.
+
+CREATE TABLE Employees (
+    EmployeeID INT PRIMARY KEY,
+    Name VARCHAR(50),
+    Role VARCHAR(50)
+);
+
+CREATE TABLE Projects (
+    ProjectID INT PRIMARY KEY,
+    ProjectName VARCHAR(100),
+    EmployeeID INT,
+    FOREIGN KEY (EmployeeID) REFERENCES Employees(EmployeeID)
+);
+
+INSERT INTO Employees (EmployeeID, Name, Role)
+VALUES 
+(1, 'John', 'Developer'),
+(2, 'Alice', 'Designer'),
+(3, 'Bob', 'Tester'),
+(4, 'Sarah', 'Manager');
+
+INSERT INTO Projects (ProjectID, ProjectName, EmployeeID)
+VALUES
+(101, 'E-Commerce Website', 1),
+(102, 'Mobile App', 2),
+(103, 'Database Optimization', 3),
+(104, 'Cloud Migration', NULL);
+
+select e.name,p.projectName from employees as e inner join projects as p on e.EmployeeId=p.EmployeeId;
+
+John	E-Commerce Website
+Alice	Mobile App
+Bob	Database Optimization
+
+select *from employees as e inner join projects as p on e.EmployeeId=p.EmployeeId;
+
+employeeid  name         role       projected   project name           employee id
+1	    John	Developer	101	E-Commerce Website	1
+2	    Alice	Designer	102	Mobile App	        2
+3	     Bob	Tester	        103	Database Optimization	3
+
+1 Find the roles of employees working on specific projects.
+A SELECT Employees.Role, Projects.ProjectName FROM Employees INNER JOIN Projects ON Employees.EmployeeID = Projects.EmployeeID;
+
+2 Retrieve the roles of employees assigned to the project "Mobile App."
+A SELECT Employees.Role\, Projects.ProjectName FROM Employees INNER JOIN Projects ON Employees.EmployeeID = Projects.EmployeeID WHERE Projects.ProjectName = 'Mobile App';
+OUTPUT : Designer	Mobile App
+
+SELECT Employees.Name FROM Employees INNER JOIN Projects ON Employees.EmployeeID = Projects.EmployeeID GROUP BY Employees.Name ; 
+output: John
+        Alice
+        Bob
+
+3 Get a list of employees who are working on more than one project.
+A SELECT Employees.Name, COUNT(Projects.ProjectID) AS ProjectCount FROM Employees INNER JOIN Projects ON Employees.EmployeeID = Projects.EmployeeID GROUP BY Employees.Name HAVING            count(Projects.ProjectID) > 1;
+
+4 Retrieve the details of all projects along with their corresponding employee roles.
+A SELECT Projects.ProjectName, Employees.Role FROM Projects INNER JOIN Employees ON Projects.EmployeeID = Employees.EmployeeID;
+
+5 Write a query to find all developers assigned to projects.
+A SELECT Projects.ProjectName, Employees.Name FROM Employees INNER JOIN Projects ON Employees.EmployeeID = Projects.EmployeeID WHERE Employees.Role = 'Developer';
+
+6 Fetch the project names and the employee names, sorted by the project name.
+A SELECT Projects.ProjectName, Employees.Name FROM Projects INNER JOIN Employees ON Projects.EmployeeID = Employees.EmployeeID ORDER BY Projects.ProjectName;
+
+
+
+7 Find all employees who are NOT working on any projects.
+Hint: Modify this to include unmatched rows using LEFT JOIN.
+8 Create a query that retrieves projects grouped by employee roles.
+Example Output: For Role = Developer, list all associated projects.
+9 Combine the INNER JOIN with aggregate functions. For instance:
+10 Count the number of projects each employee is assigned to.
+11 Identify projects that involve employees whose names start with "A" or "J".
+Hint: Use LIKE condition with INNER JOIN.
+12 Write a query to fetch all project names and the first letter of the assigned employee's name.
+13 If you add a StartDate and EndDate column to the Projects table:
+14 Retrieve employees who are working on projects that are currently active.
+15 Modify the existing tables to include a Department column for employees. Write a query to fetch projects grouped by departments.
+16 Fetch employees who are working on the project with the maximum ProjectID.
+17 Create a query to find duplicate entries (if any) in the Projects table where the same EmployeeID is assigned to multiple projects.
+
+
+
+
+
+
+
+
+
+
+
+
+
+select from where group by having order by -->  rule of structured query language 
+
+select *from employee where country in ("sasank","mm");
+
+use having  stop using where filter data :
+
+
+select *from emp having name="sasank";
+
+select eid from emp order by eid desc;
+
+select count(student) from employee group by city;
+
+count no of employee per city order by count :
+
+select count(emp) from employee group by city order by count(eid) asc;
+
+SELECT UPPER(student_name) FROM student;
+
+SELECT LOWER(student_name) FROM student;
+
+
+2	mike	mike@gmail.com	9999999999
+4	mike	mike@gmail.com	9999999999
+9	adam	adam@gmail.com	8889999999
+11	adam	adam@gmail.com	8889999999
+12	adam	adam@gmail.com	8889999999
+
+			
+select mid(name,1,3) from registration;
+
+out put:
+mik
+mik
+ada
+ada
+ada
+
+
+select now() as time;
+
+output: 2024-11-22 15:42:16
+
+
+9 )top and least salary 
+
+SELECT MIN(salary) AS min_salary, MAX(salary) AS max_salary
+FROM employees;
+
+
+<table>
+<tr>
+<th>name</th>
+<th>Email</th>
+<th>mobile</th>
+</tr>
+<c:forEach var="registartion" items="${registartions}">
+
+<tr>
+<td>${registration.name}</td>
+<td>${registration.emailId}</td>
+<td>${registration.mobile}</td>
+</tr>
+
+</c:forEach>
+</table>
+
+
+
+
+

@@ -1,5 +1,5 @@
 Here’s a detailed explanation of each command and its output in the provided terminal session:
-
+       
 1. Switching Users and Permissions
 bash
 Copy

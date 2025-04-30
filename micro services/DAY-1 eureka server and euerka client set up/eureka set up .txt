@@ -1,0 +1,50 @@
+create a project : spring project 
+
+==============================================================
+| Step | Description                                          |
+==============================================================
+| 1    | Create Eureka Server (Service Registry)              |
+--------------------------------------------------------------
+|      | a) Create a Spring Boot project                      |
+|      | b) Add dependency: 'spring-cloud-starter-netflix-eureka-server' or eureka server | spring dev tools | spring web 
+|      | c) Add @EnableEurekaServer in main class             |
+|      | d) Configure application.properties:                 |
+|         server.port=8761                                    |
+|         eureka.client.register-with-eureka=false            |
+|         eureka.client.fetch-registry=false  
+Note: 
+This tells the Eureka Server:
+Don't register itself as a client.
+Don't try to fetch registry data (because it's the registry).                |
+--------------------------------------------------------------
+| 2    | Run Eureka Server                                    |
+|      | Access: http://localhost:8761                        |
+==============================================================
+
+PART 2:
+
+now creating another project name :microservices-1
+
+add dependency spring web ,spring dev tools ,eureka client server 
+
+@EnableDiscoveryClient in main 
+
+server.port=8081 
+
+now localhost:8761 
+
+you can see microservice-1 is added to eureka server
+
+---------------------------------------------------------------------------------------------------------------------------------------
+PART 3
+now creating another project name :microservices-2
+
+add dependency spring web ,spring dev tools ,eureka client server 
+
+@EnableDiscoveryClient in main 
+
+server.port=8082
+
+now localhost:8761 
+
+you can see microservice-1 is added to eureka server 

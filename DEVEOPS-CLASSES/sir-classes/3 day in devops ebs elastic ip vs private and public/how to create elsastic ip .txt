@@ -1,0 +1,10 @@
+allocate elastic ip : choose region -- >allocate 
+
+you can name it after creation
+
+click on ip : assocate ip address :
+choose instance - associate 
+
+now you associated now you can deallocate go to elastic ip :
+
+actions :realase ip elstic ip 

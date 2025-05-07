@@ -1,0 +1,112 @@
+we already set up service registory now we are gonna set up admin server 
+zipkin tells about response tym of request and data come back 
+amin server helps to know the health of the server 
+
+api server 1   ---      server registory 
+api server 2   ---      admin server
+                        zipkin server                   
+
+
+add eureka server in dependency
+@EnableEurekaServer  add to main file
+
+server.port=8761                                  -- microservices will auromatically registory 
+eureka.client.register-with-eureka=false           -- this is not client 
+eureka.client.fetch-registry=false                 -- no fetching should happened
+
+
+admin server :
+
+this will use spring activator in back ground but its provide ui to monitor the health of microservices
+
+create a new spring starter project 
+
+ADD DEPENDENCY:
+
+<dependency>
+  <groupId>de.codecentric</groupId>
+  <artifactId>spring-boot-admin-starter-server</artifactId>
+</dependency>
+<dependency>
+  <groupId>org.springframework.boot</groupId>
+  <artifactId>spring-boot-starter-web</artifactId>
+</dependency>
+
+----------------------------------------------------------------------------------
+Enable Admin Server by adding @EnableAdminServer annotation to your main class:
+
+server.port:8081
+
+localhost:8081
+
+
+
+Zipkin SERVER:
+
+
+1. Download Zipkin Servers: https://zipkin.io/pages/quickstart ---> choose java and latest version --> click ---> zip got downloaded
+
+now copy it and make a folder in c and paste it in new folder --zipkin folder 
+
+2. To run jar file : java -jar file-name
+
+now open cmd -- and use  {{ java -jar zipkin-server-3.5.1-exec.jar }} to run the zipkin server locally 
+
+3. Access that on port 9411                http://127.0.0.1:9411/
+
+In cmd we will get the link paste it to get ui 
+
+
+
+
+
+
+Now its tym to create the first microservices:
+
+
+add : zipkin 
+      spring web
+      spring dev tools 
+      spring boot activator
+      admin client 
+      eruka discoury client 
+
+finish 
+
+http://127.0.0.1:9411/
+
+spring.application.name=microservice-1
+server.port=8082
+
+# Eureka - Optional if you are running eureka on port 8671 if it is not there also it will work
+eureka.client.service-url.defaultZone=http://localhost:8761/eureka
+
+# Admin Server
+spring.boot.admin.client.url=http://localhost:8081
+management.endpoints.web.exposure.include=*
+
+# Zipkin - Optional to mention. It will register with ZIPKIN Automatically if it is not there also it will work
+
+spring.zipkin.base-url=http://localhost:9411
+
+now make congtroller layer :
+
+@RestController
+@RequestMapping("/user")
+public class Controller {
+	@GetMapping("/msg")
+	public String userSignin()
+	{
+		return "it is working";
+	}
+}
+
+then run the app go to eureka and click on the microservices : you will get this in status 
+
+
+http://sasank2323:8082/actuator/info---> remove actuator and info and add user url
+
+http://sasank2323:8082/user/msg
+
+
+• Design Patterns (Singleton, Factory, Strategy, etc.)

@@ -1,0 +1,202 @@
+
+#############################################
+🔐 Core Features of Spring Security:
+##############################################
+1. Authentication: Verifies who you are (e.g., username & password, JWT etc.).
+
+2. Authorization: Determines what you are allowed to do (e.g., access control for URLs, methods, etc.).
+
+3. Protection Against Common Security Threats
+
+a. CSRF (Cross-Site Request Forgery)
+--------------------------------------
+1. 🛡 CSRF (Cross-Site Request Forgery)
+What it is:
+An attacker tricks a logged-in user into unknowingly sending a request (like transferring money or changing a password) to your application.
+
+Example:
+
+-> You're logged into yourbank.com.
+-> An attacker sends you a malicious link:
+-> <img src="https://yourbank.com/transfer?to=attacker&amount=1000" />
+-> If your session is still active, your browser might execute this without your intent.
+-> Spring Security Protection:
+-> Automatically adds a CSRF token to every form and expects it in requests. 
+-> In a web application that uses Spring Security, the CSRF token is automatically added as a hidden input field inside HTML forms.
+-> Blocks requests without valid tokens.
+
+
+
+2. 🔒 Session Fixation
+------------------------------------
+What it is:
+An attacker sets a known session ID for a user, then waits for the user to log in. If successful, the attacker reuses the same session.
+
+Example:
+-> Attacker sends a link with a fixed session ID:
+-> https://example.com/login;jsessionid=abc123
+-> User logs in; attacker now hijacks the session with abc123.
+-> Spring Security Protection:
+-> Regenerates the session ID after successful login by default (prevents reuse).
+
+To Enable we do this: http.sessionManagement().sessionFixation().migrateSession();  // default behavior
+
+
+3. Clickjacking
+
+-> Here's a simplified explanation of the Clickjacking attack:
+-> Attacker's Page: The attacker creates a webpage that hides a legitimate banking website inside an invisible iframe (like a hidden box).
+-> User's Interaction: The user thinks they are clicking on a button (e.g., "Play Video" or "Download File") on the attacker’s page.
+-> What Happens: In reality, the user is actually clicking on the invisible iframe that contains the banking page. They might unintentionally trigger actions on the banking site, like transferring money or changing their account settings.
+
+4. Brute-Force Attack Example
+-> What It Is: A Brute-Force Attack is when an attacker attempts to guess the correct credentials (like a password) by trying many possible combinations until they find the correct one.
+
+Example:
+-> The Attacker's Goal: The attacker wants to gain unauthorized access to a user's account, for example, the user’s bank account.
+
+-> How It Works:
+-> The attacker knows the username (e.g., "victim123") but not the password.
+-> Using automated tools, the attacker repeatedly tries different passwords for the account, for example:
+-> Password attempt 1: password123
+-> Password attempt 2: 123456
+-> Password attempt 3: victim123
+-> Password attempt 4: qwerty
+
+And so on, until the correct password is found.
+
+-> How It Looks to the User: The attacker might perform hundreds of thousands or even millions of attempts per second, which can eventually crack weak passwords.
+
+-> Attack's Success: Once the attacker guesses the correct password, they can log into the victim’s account and gain access to sensitive information, such as personal data or financial records.
+
+-> How to Prevent Brute-Force Attacks:
+
+a. Rate Limiting:
+Limit the number of failed login attempts within a certain time frame (e.g., 5 attempts per minute). After exceeding this limit, block the IP address or enforce a longer delay before the next attempt.
+
+b. CAPTCHA:
+Use CAPTCHA challenges after a certain number of failed login attempts. This helps to ensure that it's a human attempting the login rather than a bot performing automated attacks.
+
+c. Account Lockout:
+Temporarily lock an account after a set number of failed login attempts. For example, lock the account for 10 minutes after 5 failed login attempts.
+
+d. Multi-Factor Authentication (MFA):
+Use MFA to add an extra layer of security. Even if the attacker manages to guess the password, they will still need access to the second factor (e.g., a phone or hardware token).
+
+e. Strong Passwords:
+Encourage users to use strong, unique passwords (e.g., a combination of uppercase, lowercase letters, numbers, and special characters). Use a password strength checker and enforce password complexity rules.
+
+5. Password Handling: Secure password storage using hashing (e.g., BCrypt).
+
+6. Integration with Spring Boot: Auto-configuration with sensible defaults.
+
+7. JWT (JSON Web Token)
+
+
+
+Example 1:
+---------------
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/api/v1/welcome")
+public class WelcomeController {
+	
+	
+	@GetMapping("/hello")
+	public String hello() {
+		return "hello";
+	}
+	
+	@GetMapping("/hi")
+	public String hi() {
+		return "hi";
+	}
+
+}
+
+SecuirtyConfigFile - to Permit All request
+------------------------------------------
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.web.SecurityFilterChain;
+
+@Configuration
+@EnableWebSecurity
+public class AppSecurityConfig {
+
+	
+	@Bean
+	public SecurityFilterChain securityConfig(HttpSecurity http) throws Exception{
+		http.authorizeHttpRequests(
+				 req->{
+					 req.anyRequest().permitAll();
+				 }
+				);
+		return http.build();
+		
+	}
+}
+
+
+Example 2:
+-----------
+
+Example 1:
+---------------
+
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
+
+@RestController
+@RequestMapping("/api/v1/welcome")
+public class WelcomeController {
+	
+	
+	@GetMapping("/hello")
+	public String hello() {
+		return "hello";
+	}
+	
+	@GetMapping("/hi")
+	public String hi() {
+		return "hi";
+	}
+
+}
+
+SecuirtyConfigFile - to Permit All request
+------------------------------------------
+
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.web.SecurityFilterChain;
+
+@Configuration
+@EnableWebSecurity
+public class AppSecurityConfig {
+
+	
+	@Bean
+	public SecurityFilterChain securityConfig(HttpSecurity http) throws Exception{
+		http.authorizeHttpRequests(
+				 req->{
+					req.requestMatchers("/api/v1/welcome/hello").permitAll()
+					.anyRequest().authenticated();
+				 }
+				);
+		return http.build();
+		
+	}
+
+}
+

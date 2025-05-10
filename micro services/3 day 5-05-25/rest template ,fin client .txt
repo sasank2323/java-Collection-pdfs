@@ -1,0 +1,73 @@
+Very Important Note:
+##########################
+✅ Tools That Support Service Name Access via Eureka:
+
+Tool	      Can Use Service Name (e.g., MICROSERVICES-1)	       Requires Eureka + Config
+Feign Client	         ✅ Yes	                                        Built-in support (just use @FeignClient)
+RestTemplate	         ✅ Yes	                                        Requires @LoadBalanced on bean
+WebClient	         ✅ Yes	                                        Requires @LoadBalanced on WebClient builder
+Browser / Postman	 ❌ No	                                        Needs actual host URL like host.docker.internal
+
+So how to access application with Service name then? To do so, we have to use client like Feign, Webclient, RestTemplate.
+Seond These Clients provide load balancer concept. Our microservices will continue to run even when url changes as microservice are being accessed using microservice names from eureka server.
+
+
+Difference Between Rest Template, Webclient & Feign client
+##############################################################
+
+
+Feature                         | RestTemplate (with setup)  | WebClient (with setup)  | Feign Client (automatic)
+------------------------------- | -------------------------- | ----------------------- | --------------------------
+Can use microservice name       | Yes                        | Yes                     | Yes
+Requires manual configuration   | Yes (@LoadBalanced)        | Yes (@LoadBalanced)     | No
+Built-in load balancing         | Yes                        | Yes                     | Yes
+URL hardcoded by default        | Yes                        | Yes                     | No
+Effort level                    | Medium                     | Medium                  | Low
+
+
+Example:
+Tool            | Call Example                                                                     
+--------------- | --------------------------------------------------------------------------------
+RestTemplate    | restTemplate.getForObject("http://MICROSERVICES-1/api/data", String.class);   
+  
+WebClient       | webClient.get().uri("http://MICROSERVICES-1/api/data").retrieve().bodyToMono(); 
+
+Feign Client    | @FeignClient(name = "MICROSERVICES-1") 
+                  public interface Client { 
+                  @GetMapping("/api/data") String getData(); 
+                  }
+
+####################################################################################
+Create Micro service 2 - Use Inter microservices communication --> Use Feign Client
+####################################################################################
+
+Step 1: Create Micro Service 2 Spring boot project
+Step 2: Add Following Dependencies
+
+==================================================================================================================
+| Dependency Name               | Maven Artifact ID                      | Purpose                             |
+==================================================================================================================
+| Eureka Discovery Client       | spring-cloud-starter-netflix-eureka-client | Registers service in Eureka     |
+| Spring Boot Admin Client     | spring-boot-admin-starter-client       | Sends monitoring data to Admin UI   |
+| Spring Web                   | spring-boot-starter-web                | Enables REST API support             |
+| DevTools                     | spring-boot-devtools                   | Enables auto-restart and live reload|
+| Spring Actuator              | spring-boot-starter-actuator           | Exposes health/metrics endpoints     |
+| Zipkin Tracing               | spring-cloud-starter-zipkin            | Sends tracing data to Zipkin         |
+| Sleuth (auto tracing)        | spring-cloud-starter-sleuth            | Generates trace & span IDs           |   not added 
+| OpenFeign(Client)            | org.springframework.cloud              | Performs Communication with other microservice|
+==================================================================================================================
+
+
+Step 3: Create Fiegn Interface create interface with out any package 
+
+
+import org.springframework.cloud.openfeign.FeignClient;
+import org.springframework.web.bind.annotation.GetMapping;
+
+@FeignClient(name = "MICROSERVICES-1") 
+public interface Client {
+	
+	@GetMapping("/message")
+	public String getData();
+
+}

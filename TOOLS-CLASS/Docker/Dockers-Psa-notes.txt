@@ -30,9 +30,9 @@ Linux VM--->Install Docker Engine--->Docker Engine acts as bridge between Linux 
 
 Docker Architecture:
 ________________________________________________________________________
-Docker File: Here we will provide Intructions to create docker image
-Docker Image: Application Package with dependencies of it
-Docker Registry: Its a hub to store docker images
+Docker File: Here we will provide Intructions to create docker image    it is just like pom it is present in spring boot Dockerfile 
+Docker Image: Application Package with dependencies of it               after we use build image will get created and store image in docker hub collections of docker images after that we    _                                                                       can  pull image any tym 
+Docker Registry: Its a hub to store docker images                       
 Docker Container: Isolated environment to run docker image
 
 What is containerization?
@@ -359,7 +359,7 @@ ___________________________________________________________________________
 -> Spring Boot applications will be packaged as a jar file for deployment. 
 -> To run the jar file we will use command :  java -jar <file-name.jar>
 -> To run springboot application jar file we will use tomcat server as "embedded server".
--> By default spring boot application will run on port number 8080
+-> By default spring boot application will run on port number 8232
 
 Step 1: Create Docker File
 
@@ -382,6 +382,7 @@ Step 2: Note (Install maven and git in linux VM first)
 
 3) Create docker image and check that: 
 -> docker build -t psait/pankajsiracademy:<tag> .
+
 (
 Here 
 -> psait is username

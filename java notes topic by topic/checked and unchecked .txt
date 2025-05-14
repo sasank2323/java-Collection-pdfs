@@ -1,0 +1,44 @@
+✅ Why should checked exceptions be handled?
+Checked exceptions are exceptions that are checked at compile-time. Java forces you to handle them using try-catch or declare them with throws.
+
+✔ Reason:
+Checked exceptions represent recoverable conditions — like IOException, SQLException, or FileNotFoundException.
+
+The compiler ensures you think about these exceptions because they’re common in external operations (file I/O, DB, network).
+
+Not handling them would leave your program incomplete and unsafe.
+
+Example:
+
+java
+Copy
+Edit
+try {
+    FileReader fr = new FileReader("file.txt"); // FileNotFoundException
+} catch (FileNotFoundException e) {
+    System.out.println("File not found, please check the path.");
+}
+❌ Why are unchecked exceptions not required to be handled?
+Unchecked exceptions (like NullPointerException, ArrayIndexOutOfBoundsException, ArithmeticException) are not checked at compile-time. These usually represent programming bugs — logic errors that should be fixed, not caught.
+
+✔ Reason:
+They occur due to developer mistakes and not due to external conditions.
+
+Catching them everywhere would clutter code and hide problems.
+
+Java assumes that these should be fixed in code logic, not handled at runtime unless absolutely needed.
+
+Example:
+
+java
+Copy
+Edit
+int x = 10 / 0; // ArithmeticException — should be avoided, not caught casually
+🔍 Summary:
+Exception Type	Checked	Unchecked
+Examples	IOException, SQLException	NullPointerException, ArithmeticException
+Compile-time check	Yes	No
+Must be handled	Yes (try-catch or throws)	No (but can be)
+Use case	Recoverable situations	Programmer errors / bugs
+
+Let me know if you want a quick quiz or example code to test your understanding!
